@@ -1,5 +1,6 @@
 /*
 Allows the robot to accurately rotate a set number of degrees or move a set amount of distance at a set speed.
+The parameters in the macros need to be changed for different use cases.
 
 -Yujie
 */
@@ -18,7 +19,10 @@ void rotateRob(float angle, int speed);
 
 task main()
 {
-	moveRob(10, )
+	moveRob(10,-80);
+	//sample moveRob with 10 cm forwards at 80% speed backwards.
+	rotateRob(180,50);
+	//sample rotateRob with 180 degree turn at 50 speed
 }
 
 /*
