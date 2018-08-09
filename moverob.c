@@ -1,3 +1,9 @@
+/*
+Allows the robot to accurately rotate a set number of degrees or move a set amount of distance at a set speed.
+
+-Yujie
+*/
+
 #define WHEEL 18
 #define AXLE 12.5
 #define MINDETECTIONS1 20
@@ -5,62 +11,19 @@
 #define TENNIS 1
 #define BOTTLE 2
 
-//TODO: code theta r polar -> cartesian
 
-float GPSx = 0.0;
-float GPSy = 0.0;
-
-float theta = 0.0;
-
-int initTime = nSysTime;
-void updateGPS(float x,float y);
-int detectionState();
 void moveRob(float distance, int speed);
 void rotateRob(float angle, int speed);
-void printTime()
-{
-int milliTime = nSysTime - initTime;
-int milliseconds = milliTime % 1000;
-int seconds = (milliTime / 1000) % 60 ;
-int minutes = ((milliTime / (1000*60)) % 60);
-displayCenteredBigTextLine(0,"%d:%d:%d", minutes, seconds, milliseconds);
-}
 
 
 task main()
 {
-	rotateRob(10,90);
-	moveRob(10,-50); //UNIT TEST GOOD
-	displayCenteredBigTextLine(0,"%d",GPSx);
-	displayCenteredBigTextLine(2,"%d",GPSy);
-	displayCenteredBigTextLine(4,"%d",theta);
-	sleep (10000);
+	moveRob(10, )
 }
 
-
-void updateGPS(float x,float y)
-{
-	GPSx = x;
-	GPSy = y;
-}
-
-int detectionState()
-{
-	if(getUSDistance(S1)<MINDETECTIONS1)
-	{
-		if(getUSDistance(S2)<MINDETECTIONS2)
-		{
-			return BOTTLE;
-		}else
-		{
-			return TENNIS;
-		}
-	}else
-	{
-		return 0;
-	}
-}
-
+/*
+moveRob takes distance in cm. Speed is from -100 to 100. Negative for either value is backwards.
+*/
 void moveRob(float distance, int speed)
 {
 	if(speed < 0)
@@ -68,8 +31,6 @@ void moveRob(float distance, int speed)
 		speed *= -1;
 		distance *= -1;
 	}
-	GPSy += distance * sgn(speed) * sinDegrees(theta);
-	GPSx += distance * sgn(speed) * cosDegrees(theta);
 	int encoder[2];
 	encoder[0] = getMotorEncoder(motorA);
 	encoder[1] = getMotorEncoder(motorD);
@@ -84,6 +45,9 @@ void moveRob(float distance, int speed)
 	setMotorSpeed(motorD,0);
 }
 
+/*
+rotateRob takes angle out of 360 with counterclockwise being positive and clockwise being negative. Speed is -100 to 100.
+*/
 void rotateRob(float angle, int speed)
 {
 	int encoder[2];
@@ -100,6 +64,4 @@ void rotateRob(float angle, int speed)
 	while(flag[0]+sgn(encoder[0]-getMotorEncoder(motorA)) && flag[1]+sgn(encoder[1]-getMotorEncoder(motorB))){}
 	setMotorSpeed(motorA,0);
 	setMotorSpeed(motorD,0);
-
-	initTime = nSysTime;
 }
